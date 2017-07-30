@@ -19,4 +19,7 @@ target 'AppodealTesting' do
 
   pod ‘Unirest','~>1.1'
   pod 'Appodeal','~>2.0’
+  pod 'FBNetworkReachability', '~> 1.0'
+  pod 'JMImageCache', '~> 0.4'
+  
 end

@@ -87,16 +87,22 @@ PODS:
     - Appodeal/Core
   - Appodeal/ZPlayAdapter (2.0.0):
     - Appodeal/Core
+  - FBNetworkReachability (1.0.1)
+  - JMImageCache (0.4.0)
   - Unirest (1.1.4)
 
 DEPENDENCIES:
   - Appodeal (~> 2.0)
+  - FBNetworkReachability (~> 1.0)
+  - JMImageCache (~> 0.4)
   - Unirest (~> 1.1)
 
 SPEC CHECKSUMS:
   Appodeal: 66798d5db8f86996cd540609f801376c2af326d0
+  FBNetworkReachability: 8afc4a2a1d6d24a5fd78db732b48fce9351519f9
+  JMImageCache: fac25eb168a25b29ac130fee6a6b17ea463c1d86
   Unirest: 5e4d93eaf32463bf619a4ecd3bbc8c32acf21eac
 
-PODFILE CHECKSUM: 32ec9813b2630bf98bb1e7c07db55412e71d302b
+PODFILE CHECKSUM: 461e6403cc097bb617c96c3a1f3627714abc4d7d
 
 COCOAPODS: 1.2.1

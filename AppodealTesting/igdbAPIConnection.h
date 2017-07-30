@@ -11,6 +11,6 @@
 @interface igdbAPIConnection : NSObject
 
     -(NSArray *)getGamesIndexes;
-    -(NSMutableArray *)getGamesInfo:(NSArray *)gamesIndexes;
+    -(NSMutableArray *)getGamesInfo:(NSArray *)gamesIndexes pageNumber:(int)page;
     -(NSArray *)getGameInfo:(NSNumber *)gameId;
 @end

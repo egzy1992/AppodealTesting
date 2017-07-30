@@ -12,6 +12,8 @@
 #import "Appodeal/Appodeal.h"
 #import "GameCell.h"
 #import "GameBriefData.h"
+#import "JMImageCache.h"
+#import "FBNetworkReachability.h"
 
 @interface CollectionViewController (){
     NSArray *gamesIndexes;
@@ -42,15 +44,30 @@
     
     [super viewDidLoad];
     
+    FBNetworkReachabilityConnectionMode mode = [FBNetworkReachability sharedInstance].connectionMode;
+    if (mode!=FBNetworkReachableNon)
+    {
     
-    igdbAPIConnection *newIGDBconnection=[[igdbAPIConnection alloc] init];
-    gamesIndexes=[newIGDBconnection getGamesIndexes];
-    arrGames=[newIGDBconnection getGamesInfo:gamesIndexes];
+        igdbAPIConnection *newIGDBconnection=[[igdbAPIConnection alloc] init];
+        gamesIndexes=[newIGDBconnection getGamesIndexes];
+        arrGames=[newIGDBconnection getGamesInfo:gamesIndexes pageNumber:0];
 
-    
-    [Appodeal setTestingEnabled: YES];
-    [Appodeal setBannerDelegate:self];
-    [Appodeal showAd:AppodealShowStyleBannerBottom rootViewController:self];
+        [Appodeal setBannerDelegate:self];
+        [Appodeal showAd:AppodealShowStyleBannerBottom rootViewController:self];
+        
+        
+    }
+    else
+    {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Alert"
+                                                                       message:@"Network problems! Connect to the internet, please!"
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     return arrGames.count;
@@ -60,7 +77,11 @@
     NSInteger row = indexPath.row;
     GameBriefData* item = arrGames[row];
     currentCell.gameLabel.text = item.gameName;
-    currentCell.gameImg.image = item.gameImg;
+
+    [[JMImageCache sharedCache] imageForURL:[NSURL URLWithString:item.gameImgUrl] completionBlock:^(UIImage *downloadedImage) {
+        currentCell.gameImg.image = downloadedImage;
+    }];
+  
     currentCell.idLabel.text = [item.gameId stringValue];
     
     return currentCell;

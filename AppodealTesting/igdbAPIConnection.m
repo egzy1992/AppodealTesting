@@ -33,39 +33,38 @@
 
 
 
--(NSMutableArray *)getGamesInfo:(NSArray *)gamesIndexes
+-(NSMutableArray *)getGamesInfo:(NSArray *)gamesIndexes pageNumber:(int)page
 {
-    int itemsOnScreen=30;
+    int itemsOnScreen=45;
     UNIHTTPJsonResponse *gameResponse;
-    NSMutableDictionary *currentGameInfo;
     NSMutableArray *gamesInfo=[NSMutableArray array];
-    NSMutableString *gamesInfoReguestURL=@"https://api-2445582011268.apicast.io/games/";
-    NSMutableString *gameInfoRequestURL=@"";
-    
-    int indexesCount=gamesIndexes.count;
+    NSMutableString *gamesInfoReguestURL=[[NSMutableString alloc] initWithString:@"https://api-2445582011268.apicast.io/games/"];
+
     int count=0;
+    int helpCount=page*itemsOnScreen;
     NSMutableArray *arrGames = [NSMutableArray arrayWithCapacity:itemsOnScreen];
     for (NSNumber *gameIndex in gamesIndexes) {
-        if(count<itemsOnScreen)
-        {
-            gamesInfoReguestURL=[gamesInfoReguestURL stringByAppendingString:[gameIndex stringValue]];
+        if((count<itemsOnScreen)&&(helpCount<=0))        {
+            gamesInfoReguestURL=[[NSMutableString alloc] initWithString:[gamesInfoReguestURL stringByAppendingString:[gameIndex stringValue]]];
             if (count<(itemsOnScreen-1))
             {
-                gamesInfoReguestURL=[gamesInfoReguestURL stringByAppendingString:@","];
+                gamesInfoReguestURL=[[NSMutableString alloc] initWithString:[gamesInfoReguestURL stringByAppendingString:@","]];
             }
             count++;
         }
         else
-        {
+            if (count>(itemsOnScreen-1))
+            {
             break;
         }
+        helpCount--;
     }
     
     gameResponse = [[UNIRest get:^(UNISimpleRequest *request) {
         [request setUrl:gamesInfoReguestURL];
         [request setHeaders:headers];
     }] asJson];
-    gamesInfo=gameResponse.body.array;
+    gamesInfo=[[NSMutableArray alloc] initWithArray:gameResponse.body.array];
     
     
     
@@ -74,10 +73,11 @@
         GameBriefData* game = [[GameBriefData alloc] init];
         game.gameName = gamesInfo[i][@"name"];
         game.gameId=gamesInfo[i][@"id"];
-        game.gameImgUrl=@"https:";
-        game.gameImgUrl=[game.gameImgUrl stringByAppendingString: gamesInfo[i][@"cover"][@"url"]];
-        NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString: game.gameImgUrl]];
-        game.gameImg=[UIImage imageWithData:data];
+        game.gameImgUrl=[[NSMutableString alloc] initWithString:@"https:"];
+        game.gameImgUrl=[[NSMutableString alloc] initWithString:[game.gameImgUrl stringByAppendingString: gamesInfo[i][@"cover"][@"url"]]];
+ 
+       /* NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString: game.gameImgUrl]];
+        game.gameImg=[UIImage imageWithData:data];*/
         [arrGames addObject:game];
     }
     
@@ -87,12 +87,12 @@
 -(NSArray *)getGameInfo:(NSNumber *)gameId
 {
     UNIHTTPJsonResponse *gameResponse;
-    NSMutableDictionary *currentGameInfo;
-    NSMutableArray *gamesInfo=[NSMutableArray array];
-    NSMutableString *gamesInfoReguestURL=@"https://api-2445582011268.apicast.io/games/";
+
+
+    NSMutableString *gamesInfoReguestURL=[[NSMutableString alloc] initWithString:@"https://api-2445582011268.apicast.io/games/"];
     
-    gamesInfoReguestURL=[gamesInfoReguestURL stringByAppendingString:[gameId stringValue]];
-    gamesInfoReguestURL=[gamesInfoReguestURL stringByAppendingString:@"?fields=*"];
+    gamesInfoReguestURL=[[NSMutableString alloc] initWithString:[gamesInfoReguestURL stringByAppendingString:[gameId stringValue]]];
+    gamesInfoReguestURL=[[NSMutableString alloc] initWithString:[gamesInfoReguestURL stringByAppendingString:@"?fields=*"]];
     gameResponse = [[UNIRest get:^(UNISimpleRequest *request) {
         [request setUrl:gamesInfoReguestURL];
         [request setHeaders:headers];

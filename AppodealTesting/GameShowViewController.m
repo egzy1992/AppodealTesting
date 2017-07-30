@@ -9,6 +9,7 @@
 #import "GameShowViewController.h"
 #import "UNIRest.h"
 #import "igdbAPIConnection.h"
+#import "JMImageCache.h"
 
 @interface GameShowViewController ()
 {
@@ -22,14 +23,16 @@
 
 -(void)putDataIntoScreen{
     self.gameShowName.text=infoGame[0][@"name"];
-    int *Rate=[infoGame[0][@"rating"] intValue];
+    int Rate=[infoGame[0][@"rating"] intValue];
     NSNumber *rateNumber=[[NSNumber alloc] initWithInt:Rate];
     self.gameShowRate.text=[rateNumber stringValue];
     self.gameShowText.text=infoGame[0][@"summary"];
-    NSMutableString *gameImgUrl=@"https:";
-    gameImgUrl=[gameImgUrl stringByAppendingString: infoGame[0][@"cover"][@"url"]];
-    NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString: gameImgUrl]];
-    self.gameShowCover.image=[UIImage imageWithData:data];
+    NSMutableString *gameImgUrl=[[NSMutableString alloc] initWithString:[[NSMutableString alloc] initWithString:@"https:"]];
+    gameImgUrl=[[NSMutableString alloc] initWithString:[gameImgUrl stringByAppendingString:infoGame[0][@"cover"][@"url"]]];
+    [self.gameShowCover setImageWithURL:[NSURL URLWithString:gameImgUrl]
+                        placeholder:[UIImage imageNamed:@"photo-frame.png"]];
+    //NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString: gameImgUrl]];
+    //self.gameShowCover.image=[UIImage imageWithData:data];
     
 
 }
