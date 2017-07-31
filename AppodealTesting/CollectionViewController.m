@@ -51,8 +51,10 @@
         igdbAPIConnection *newIGDBconnection=[[igdbAPIConnection alloc] init];
         gamesIndexes=[newIGDBconnection getGamesIndexes];
         arrGames=[newIGDBconnection getGamesInfo:gamesIndexes pageNumber:0];
-
+// Класс не имплементирует этот протокол
         [Appodeal setBannerDelegate:self];
+// Можно было добавить оффсет на вьюшку с коллекцией, чтобы баннер не перекрывал
+// контент
         [Appodeal showAd:AppodealShowStyleBannerBottom rootViewController:self];
         
         
@@ -78,6 +80,7 @@
     GameBriefData* item = arrGames[row];
     currentCell.gameLabel.text = item.gameName;
 
+//Небезопастный вызов - возможна утечка памяти
     [[JMImageCache sharedCache] imageForURL:[NSURL URLWithString:item.gameImgUrl] completionBlock:^(UIImage *downloadedImage) {
         currentCell.gameImg.image = downloadedImage;
     }];
@@ -100,6 +103,7 @@
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
+//Небезопастный каст к классу
     GameCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
     NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
     f.numberStyle= NSNumberFormatterDecimalStyle;

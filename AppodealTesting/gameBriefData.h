@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+// Почему выбраны именно эти атрибуты свойств?
 @interface GameBriefData : NSObject
     @property (nonatomic, retain) NSString* gameName;
     @property (nonatomic, retain) UIImage* gameImg;

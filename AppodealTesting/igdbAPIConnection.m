@@ -8,6 +8,7 @@
 
 #import "igdbAPIConnection.h"
 #import "UNIRest.h"
+//Ненужный импорт
 #import "GameCell.h"
 #import "GameBriefData.h"
 
@@ -27,7 +28,6 @@
         [request setUrl:@"https://api-2445582011268.apicast.io/genres/9?fields=name,games"];
         [request setHeaders:headers];
     }] asJson];
-    
     return response.body.array[0][@"games"];
 }
 

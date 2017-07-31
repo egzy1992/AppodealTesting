@@ -11,6 +11,7 @@
 #import "igdbAPIConnection.h"
 #import "JMImageCache.h"
 
+//Почему выбрано такое объявление переменных
 @interface GameShowViewController ()
 {
     NSArray *infoGame;
@@ -22,6 +23,7 @@
 @implementation GameShowViewController
 
 -(void)putDataIntoScreen{
+    //При выключении интернета приложение крэшится
     self.gameShowName.text=infoGame[0][@"name"];
     int Rate=[infoGame[0][@"rating"] intValue];
     NSNumber *rateNumber=[[NSNumber alloc] initWithInt:Rate];
